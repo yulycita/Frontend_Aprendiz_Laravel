@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Box, Button, CssBaseline, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, CssBaseline, Stack, TextField } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   fetchTodos,
@@ -13,9 +13,44 @@ import TablaAprendiz from "../componentes/TablaAprendiz";
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
-    primary: { main: "#22d3ee" },
-    background: { default: "#0b1220", paper: "#111827" },
+    mode: "light",
+    primary: { main: "#d624c1", dark: "#872991", contrastText: "#ffffff" },
+    secondary: { main: "#e8753d", dark: "#c55625", contrastText: "#ffffff" },
+    background: { default: "#f4f7fb", paper: "#ffffff" },
+    text: { primary: "#172033", secondary: "#64748b" },
+    divider: "#e2e8f0",
+  },
+  typography: {
+    fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    h5: { fontWeight: 800, letterSpacing: "-0.025em" },
+    body2: { lineHeight: 1.6 },
+    button: { fontWeight: 700, textTransform: "none" },
+  },
+  shape: { borderRadius: 12 },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: { backgroundImage: "none", boxShadow: "0 8px 24px rgba(23, 32, 51, 0.06)" },
+      },
+    },
+    MuiTextField: {
+      defaultProps: { variant: "outlined" },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffffff",
+          "& fieldset": { borderColor: "#d7e0eb" },
+          "&:hover fieldset": { borderColor: "#9aaac0" },
+          "&.Mui-focused fieldset": { borderWidth: 2 },
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: { borderRadius: 9, paddingInline: 18, minHeight: 40 },
+      },
+    },
   },
 });
 
@@ -139,24 +174,29 @@ const PrincipalView = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 2, md: 4 } }}>
-        <Stack direction={{ xs: "column", md: "row" }} spacing={2} alignItems="center" sx={{ mb: 3 }}>
-          <Typography variant="h5" sx={{ flex: 1, fontWeight: 700 }}>
-            Gestión de aprendiz
-          </Typography>
-          <TextField
-            size="small"
-            label="ID"
-            value={idFiltro}
-            onChange={(e) => setIdFiltro(e.target.value)}
-            sx={{ width: 120 }}
-          />
-          <Button variant="contained" color="secondary" onClick={buscarPorId} disabled={loading || !idFiltro}>
-            BUSCAR POR ID
-          </Button>
-          <Button variant="contained" onClick={cargarTodos} disabled={loading}>
-            {loading ? "CARGANDO..." : "VER TODOS"}
-          </Button>
+      <Box sx={{ maxWidth: 1300, mx: "auto", p: { xs: 2, sm: 3, md: 5 } }}>
+        <Stack
+          direction={{ xs: "column", md: "row" }}
+          spacing={{ xs: 2, md: 3 }}
+          alignItems={{ xs: "stretch", md: "center" }}
+          sx={{ mb: 4 }}
+        >
+          <Box sx={{ flex: 1 }} />
+          <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5}>
+            <TextField
+              size="small"
+              label="Buscar por ID"
+              value={idFiltro}
+              onChange={(e) => setIdFiltro(e.target.value)}
+              sx={{ width: { xs: "100%", sm: 150 } }}
+            />
+            <Button variant="contained" color="secondary" onClick={buscarPorId} disabled={loading || !idFiltro}>
+              Buscar
+            </Button>
+            <Button variant="contained" onClick={cargarTodos} disabled={loading}>
+              {loading ? "Cargando..." : "Ver todos"}
+            </Button>
+          </Stack>
         </Stack>
 
         {mensaje && (

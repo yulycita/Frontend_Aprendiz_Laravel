@@ -15,16 +15,19 @@ const campos = [
 
 const FormularioAprendiz = ({ form, setForm, onGuardar, onCancelar, editando, loading }) => {
   return (
-    <Paper elevation={4} sx={{ p: 2, mb: 3, border: "1px solid #334155" }}>
-      <Typography sx={{ mb: 2, fontWeight: 600 }}>
+    <Paper elevation={0} sx={{ p: { xs: 2, sm: 3 }, mb: 4, border: "1px solid", borderColor: "divider" }}>
+      <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 800 }}>
         {editando ? "Actualizar aprendiz" : "Crear aprendiz"}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        Completa los datos del aprendiz para guardar su registro.
       </Typography>
 
       <Box
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
-          gap: 2,
+          gap: { xs: 1.5, sm: 2 },
         }}
       >
         {campos.map((campo) => (
@@ -40,9 +43,9 @@ const FormularioAprendiz = ({ form, setForm, onGuardar, onCancelar, editando, lo
         ))}
       </Box>
 
-      <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+      <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
         <Button variant="contained" onClick={onGuardar} disabled={loading}>
-          {editando ? "GUARDAR CAMBIOS" : "CREAR"}
+          {editando ? "Guardar cambios" : "Crear aprendiz"}
         </Button>
         {editando && (
           <Button variant="outlined" color="inherit" onClick={onCancelar} disabled={loading}>

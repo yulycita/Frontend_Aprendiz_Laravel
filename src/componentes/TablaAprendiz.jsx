@@ -26,16 +26,16 @@ const columnas = [
 
 const TablaAprendiz = ({ data, onEditar, onEliminar, loading }) => {
   return (
-    <TableContainer component={Paper} elevation={3} sx={{ border: "1px solid #334155" }}>
+    <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid", borderColor: "divider" }}>
       <Table size="small">
-        <TableHead>
-          <TableRow sx={{ background: "#22d3ee" }}>
+        <TableHead sx={{ backgroundColor: "#eef3ff" }}>
+          <TableRow>
             {columnas.map((col) => (
-              <TableCell key={col.key} sx={{ color: "#0b1220", fontWeight: 700 }}>
+              <TableCell key={col.key} sx={{ color: "primary.dark", fontWeight: 800, py: 1.5 }}>
                 {col.label}
               </TableCell>
             ))}
-            <TableCell sx={{ color: "#0b1220", fontWeight: 700 }}>Acciones</TableCell>
+            <TableCell sx={{ color: "primary.dark", fontWeight: 800, py: 1.5 }}>Acciones</TableCell>
           </TableRow>
         </TableHead>
 
@@ -43,7 +43,9 @@ const TablaAprendiz = ({ data, onEditar, onEliminar, loading }) => {
           {data.map((fila) => (
             <TableRow key={fila.id} hover>
               {columnas.map((col) => (
-                <TableCell key={col.key}>{fila[col.key]}</TableCell>
+                <TableCell key={col.key} sx={{ py: 1.5, color: "text.secondary" }}>
+                  {fila[col.key]}
+                </TableCell>
               ))}
               <TableCell>
                 <Stack direction="row" spacing={1}>
