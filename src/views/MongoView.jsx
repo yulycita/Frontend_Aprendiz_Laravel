@@ -3,14 +3,14 @@ import { Alert, Box, Button, CssBaseline, Stack, TextField } from "@mui/material
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../theme";
 import {
-  fetchTodos,
-  fetchPorId,
-  crearAprendiz,
-  actualizarAprendiz,
-  eliminarAprendiz,
-} from "../service/aprendizService";
+  fetchTodosMongo,
+  fetchPorIdMongo,
+  crearAprendizMongo,
+  actualizarAprendizMongo,
+  eliminarAprendizMongo,
+} from "../service/aprendizMongoService";
 import FormularioAprendiz from "../componentes/FormularioAprendiz";
-import TablaAprendiz from "../componentes/TablaAprendiz";
+import TablaAprendizMongo from "../componentes/TablaAprendizMongo";
 
 const formVacio = {
   nombre: "",
@@ -31,7 +31,7 @@ const obtenerMensajeError = (e) => {
   return e.response?.data?.message || "No se pudo conectar con el servidor";
 };
 
-const PrincipalView = () => {
+const MongoView = () => {
   const [data, setData] = useState([]);
   const [form, setForm] = useState(formVacio);
   const [editandoId, setEditandoId] = useState(null);
@@ -42,7 +42,7 @@ const PrincipalView = () => {
   const cargarTodos = async () => {
     try {
       setLoading(true);
-      setData(await fetchTodos());
+      setData(await fetchTodosMongo());
     } catch (e) {
       setData([]);
       setMensaje({ tipo: "error", texto: obtenerMensajeError(e) });
@@ -59,14 +59,14 @@ const PrincipalView = () => {
     if (!idFiltro) return;
     try {
       setLoading(true);
-      const aprendiz = await fetchPorId(idFiltro);
+      const aprendiz = await fetchPorIdMongo(idFiltro);
       setData([aprendiz]);
       setMensaje(null);
     } catch (e) {
       setData([]);
       setMensaje({
         tipo: "error",
-        texto: e.response?.status === 404 ? "No existe un aprendiz con ese ID" : obtenerMensajeError(e),
+        texto: e.response?.status === 404 ? "No existe un documento con ese ID" : obtenerMensajeError(e),
       });
     } finally {
       setLoading(false);
@@ -82,11 +82,11 @@ const PrincipalView = () => {
     try {
       setLoading(true);
       if (editandoId) {
-        await actualizarAprendiz(editandoId, form);
-        setMensaje({ tipo: "success", texto: "Aprendiz actualizado" });
+        await actualizarAprendizMongo(editandoId, form);
+        setMensaje({ tipo: "success", texto: "Documento actualizado en Mongo" });
       } else {
-        await crearAprendiz(form);
-        setMensaje({ tipo: "success", texto: "Aprendiz creado" });
+        await crearAprendizMongo(form);
+        setMensaje({ tipo: "success", texto: "Documento creado en Mongo" });
       }
       cancelarEdicion();
       await cargarTodos();
@@ -98,7 +98,7 @@ const PrincipalView = () => {
   };
 
   const editar = (aprendiz) => {
-    setEditandoId(aprendiz.id);
+    setEditandoId(aprendiz._id);
     setForm({
       nombre: aprendiz.nombre,
       apellido: aprendiz.apellido,
@@ -115,11 +115,11 @@ const PrincipalView = () => {
   };
 
   const eliminar = async (id) => {
-    if (!window.confirm("¿Eliminar este aprendiz?")) return;
+    if (!window.confirm("¿Eliminar este documento de Mongo?")) return;
     try {
       setLoading(true);
-      await eliminarAprendiz(id);
-      setMensaje({ tipo: "success", texto: "Aprendiz eliminado" });
+      await eliminarAprendizMongo(id);
+      setMensaje({ tipo: "success", texto: "Documento eliminado" });
       if (editandoId === id) cancelarEdicion();
       await cargarTodos();
     } catch (e) {
@@ -146,7 +146,7 @@ const PrincipalView = () => {
               label="Buscar por ID"
               value={idFiltro}
               onChange={(e) => setIdFiltro(e.target.value)}
-              sx={{ width: { xs: "100%", sm: 150 } }}
+              sx={{ width: { xs: "100%", sm: 220 } }}
             />
             <Button variant="contained" color="secondary" onClick={buscarPorId} disabled={loading || !idFiltro}>
               Buscar
@@ -172,10 +172,10 @@ const PrincipalView = () => {
           loading={loading}
         />
 
-        <TablaAprendiz data={data} onEditar={editar} onEliminar={eliminar} loading={loading} />
+        <TablaAprendizMongo data={data} onEditar={editar} onEliminar={eliminar} loading={loading} />
       </Box>
     </ThemeProvider>
   );
 };
 
-export default PrincipalView;
+export default MongoView;
