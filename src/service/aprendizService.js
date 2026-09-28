@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE = "https://banckend-laravel.onrender.com/api/aprendiz";
+export const API_BASE = "https://banckendlaravel-production.up.railway.app/api/aprendiz";
 
 export const fetchTodos = async () => {
   const res = await axios.get(API_BASE);
